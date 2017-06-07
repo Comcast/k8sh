@@ -1,0 +1,16 @@
+
+# Displays all nodes in the cluster including kubernetes version info
+alias nodes="k get nodes -o=custom-columns=Name:.metadata.name,Kubelet:.status.nodeInfo.kubeletVersion,Proxy:.status.nodeInfo.kubeProxyVersion,Type:.metadata.labels.nodetype"
+
+
+# Runs a busybox container (optionally selecting the a specific node to run on)
+# and shells into it.
+busybox() {
+  delete po/busybox
+  OVERRIDE_PARAM=""
+  if [[ $1 ]]; then
+    echo "Restricting pod to node: $1"
+    OVERRIDE_PARAM="{ \"spec\": { \"nodeSelector\": { \"kubernetes.io/hostname\": \"$1\" } } }"
+  fi
+  k run -i --tty busybox --image=busybox --restart=Never --overrides="$OVERRIDE_PARAM" -- sh
+}

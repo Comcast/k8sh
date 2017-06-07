@@ -1,0 +1,137 @@
+ct() {
+  if [ -z "$1" ]; then
+    kubectl config current-context
+    return
+  fi
+  kubectl config use-context $1
+}
+export -f ct
+
+ns() {
+  if [ -z "$1" ]; then
+    echo $KUBECTL_NAMESPACE
+    return
+  fi
+  export KUBECTL_NAMESPACE=$1
+}
+export -f ns
+
+reloadExtensions() {
+  if [ -e ~/.k8sh_extensions ]; then
+    echo "Sourcing in ~/.k8sh_extensions..."
+    source ~/.k8sh_extensions
+  fi
+}
+export -f reloadExtensions
+
+k8sh_init() {
+
+  RED='\033[00;31m'
+  GREEN='\033[00;32m'
+  YELLOW='\033[00;33m'
+  BLUE='\033[00;34m'
+  PURPLE='\033[00;35m'
+  CYAN='\033[00;36m'
+  LIGHTGRAY='\033[00;37m'
+  LRED='\033[01;31m'
+  LGREEN='\033[01;32m'
+  LYELLOW='\033[01;33m'
+  LBLUE='\033[01;34m'
+  LPURPLE='\033[01;35m'
+  LCYAN='\033[01;36m'
+  WHITE='\033[01;37m'
+  RESTORE='\033[0m'
+
+  # Colors for the PS1 prompt
+  # For an explanation of the format, please see the Stack Exchange answer
+  # from Runium (https://unix.stackexchange.com/users/28489/runium)
+  # at http://unix.stackexchange.com/questions/105958/terminal-prompt-not-wrapping-correctly
+  PS_RED='\[\033[00;31m\]'
+  PS_GREEN='\[\033[00;32m\]'
+  PS_YELLOW='\[\033[00;33m\]'
+  PS_BLUE='\[\033[00;34m\]'
+  PS_PURPLE='\[\033[00;35m\]'
+  PS_CYAN='\[\033[00;36m\]'
+  PS_LIGHTGRAY='\[\033[00;37m\]'
+  PS_LRED='\[\033[01;31m\]'
+  PS_LGREEN='\[\033[01;32m\]'
+  PS_LYELLOW='\[\033[01;33m\]'
+  PS_LBLUE='\[\033[01;34m\]'
+  PS_LPURPLE='\[\033[01;35m\]'
+  PS_LCYAN='\[\033[01;36m\]'
+  PS_WHITE='\[\033[01;37m\]'
+  PS_RESTORE='\[\033[0m\]'
+
+  # Functional colors
+  CONTEXT_COLOR=$LRED
+  PS_CONTEXT_COLOR=$PS_LRED
+  NAMESPACE_COLOR=$LCYAN
+  PS_NAMESPACE_COLOR=$PS_LCYAN
+
+  echo ""
+  echo -e "${LPURPLE}Welcome to k${LRED}8${LPURPLE}sh${RESTORE}"
+  if [ -e ~/.bash_profile ]; then
+    echo "Sourcing in ~/.bash_profile..."
+    source ~/.bash_profile
+  fi
+  echo "Gathering current kubectl state..."
+  export KUBECTL_NAMESPACE=${parameter-default}
+
+  echo "Making aliases..."
+  alias kubectl="kubectl --namespace \$KUBECTL_NAMESPACE"
+  alias k="kubectl"
+
+  # Common actions
+  alias describe="k describe"
+  alias get="k get"
+  alias create="k create"
+  alias apply="k apply"
+  alias delete="k delete"
+  alias scale="k scale"
+  alias rollout="k rollout"
+  alias logs="k logs"
+
+  # Query common resources
+  # Resource reference list:
+  # pods (po), services (svc), deployments, replicasets (rs)
+  # replicationcontrollers (rc), nodes (no), events (ev),
+  # limitranges (limits), persistentvolumes (pv),
+  # persistentvolumeclaims (pvc), resourcequotas (quota),
+  # namespaces (ns), serviceaccounts (sa), ingresses (ing),
+  # horizontalpodautoscalers (hpa), daemonsets (ds), configmaps,
+  # componentstatuses (cs), endpoints (ep), and secrets.
+  alias pods="get pods"
+  alias services="get svc"
+  alias deployments="get deployments"
+  alias dep="get deployments" # NON-STANDARD!!
+  alias replicasets="get rs"
+  alias replicationcontrollers="get rc"
+  alias rc="get rc"
+  alias nodes="get nodes"
+  alias limitranges="get limitranges"
+  alias limits="get limitranges"
+  alias events="get events"
+  alias persistentvolumes="get pv"
+  alias pv="get pv"
+  alias persistentvolumeclaims="get pvc"
+  alias pvc="get pvc"
+  alias namespaces="get ns"
+  alias ingresses="get ing"
+  alias ing="get ing"
+  alias configmaps="get configmaps"
+  alias secrets="get secrets"
+
+  reloadExtensions
+
+  # Set up PS1 prompt
+  export PS1="($PS_CONTEXT_COLOR\$(ct)$PS_RESTORE/$PS_NAMESPACE_COLOR\$KUBECTL_NAMESPACE$PS_RESTORE) \W ${PS_LPURPLE}\$${PS_RESTORE} "
+
+  echo ""
+  echo -e "Context: $CONTEXT_COLOR$(ct)$RESTORE"
+  echo -e "Namespace: $NAMESPACE_COLOR$KUBECTL_NAMESPACE$RESTORE"
+}
+export -f k8sh_init
+
+echo "Initializing..."
+export PS1="" # Clear PS1 for prettier init
+bash -i <<< 'k8sh_init; exec </dev/tty'
