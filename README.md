@@ -6,15 +6,17 @@ A shell wrapper for bash including aliases for kubectl that makes it easy to nav
 
 ## First time
 
-Just run `k8sh`:
+Clone the repo and then make sure `k8sh` has execute permissions:
+```
+chmod +x k8sh
+```
+
+Now you can execute k8sh!
 ```
 ./k8sh
 ```
 
-k8sh needs execute permissions for the above to work or you can just execute:
-```
-bash k8sh
-```
+Add to a PATH directory to execute anywhere.
 
 k8sh will automatically look at your current kubectl configuration to determine your current kubernetes context and namespace.
 
