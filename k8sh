@@ -1,9 +1,9 @@
 ct() {
   if [ -z "$1" ]; then
-    kubectl config current-context
+    echo $KUBECTL_CONTEXT
     return
   fi
-  kubectl config use-context $1
+  export KUBECTL_CONTEXT=$1
 }
 export -f ct
 
@@ -75,10 +75,11 @@ k8sh_init() {
     source ~/.bash_profile
   fi
   echo "Gathering current kubectl state..."
+  export KUBECTL_CONTEXT=$(kubectl config current-context)
   export KUBECTL_NAMESPACE=${parameter-default}
 
   echo "Making aliases..."
-  alias kubectl="kubectl --namespace \$KUBECTL_NAMESPACE"
+  alias kubectl="kubectl --context \$KUBECTL_CONTEXT --namespace \$KUBECTL_NAMESPACE"
   alias k="kubectl"
 
   # Common actions
