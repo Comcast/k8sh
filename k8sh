@@ -76,7 +76,7 @@ k8sh_init() {
   fi
   echo "Gathering current kubectl state..."
   export KUBECTL_CONTEXT=$(kubectl config current-context)
-  export KUBECTL_NAMESPACE=${parameter-default}
+  export KUBECTL_NAMESPACE=${DEFAULT_NAMESPACE-default}
 
   echo "Making aliases..."
   alias kubectl="kubectl --context \$KUBECTL_CONTEXT --namespace \$KUBECTL_NAMESPACE"
