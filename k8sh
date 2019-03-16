@@ -1,6 +1,7 @@
 ct() {
   if [ -z "$1" ]; then
-    echo $KUBECTL_CONTEXT
+    local contexts=$(k config get-contexts -o=name | sort -n)
+    echo "$contexts"
     return
   fi
   export KUBECTL_CONTEXT=$1
@@ -9,7 +10,8 @@ export -f ct
 
 ns() {
   if [ -z "$1" ]; then
-    echo $KUBECTL_NAMESPACE
+    local namespaces=$(k get namespaces -o=jsonpath='{range .items[*].metadata.name}{@}{"\n"}{end}')
+    echo "${namespaces}"
     return
   fi
   export KUBECTL_NAMESPACE=$1
@@ -125,10 +127,10 @@ k8sh_init() {
   reloadExtensions
 
   # Set up PS1 prompt
-  export PS1="($PS_CONTEXT_COLOR\$(ct)$PS_RESTORE/$PS_NAMESPACE_COLOR\$KUBECTL_NAMESPACE$PS_RESTORE) \W ${PS_LPURPLE}\$${PS_RESTORE} "
+  export PS1="($PS_CONTEXT_COLOR\$KUBECTL_CONTEXT$PS_RESTORE/$PS_NAMESPACE_COLOR\$KUBECTL_NAMESPACE$PS_RESTORE) \W ${PS_LPURPLE}\$${PS_RESTORE} "
 
   echo ""
-  echo -e "Context: $CONTEXT_COLOR$(ct)$RESTORE"
+  echo -e "Context: $CONTEXT_COLOR$KUBECTL_CONTEXT$RESTORE"
   echo -e "Namespace: $NAMESPACE_COLOR$KUBECTL_NAMESPACE$RESTORE"
 }
 export -f k8sh_init
