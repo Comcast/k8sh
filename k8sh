@@ -8,6 +8,13 @@ ct() {
 }
 export -f ct
 
+_ct_completions()
+{
+  local contexts=$(k config get-contexts -o=name | sort -n)
+  COMPREPLY=($(compgen -W "${contexts}" "${COMP_WORDS[1]}"))
+}
+export -f _ct_completions
+
 ns() {
   if [ -z "$1" ]; then
     local namespaces=$(k get namespaces -o=jsonpath='{range .items[*].metadata.name}{@}{"\n"}{end}')
@@ -17,6 +24,13 @@ ns() {
   export KUBECTL_NAMESPACE=$1
 }
 export -f ns
+
+_ns_completions()
+{
+  local namespaces=$(k get namespaces -o=jsonpath='{range .items[*].metadata.name}{@}{"\n"}{end}')
+  COMPREPLY=($(compgen -W "${namespaces}" "${COMP_WORDS[1]}"))
+}
+export -f _ns_completions
 
 reloadExtensions() {
   if [ -e ~/.k8sh_extensions ]; then
@@ -123,6 +137,9 @@ k8sh_init() {
   alias ing="get ing"
   alias configmaps="get configmaps"
   alias secrets="get secrets"
+
+  complete -F _ns_completions ns
+  complete -F _ct_completions ct
 
   reloadExtensions
 
