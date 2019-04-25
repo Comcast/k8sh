@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 ct() {
   if [ -z "$1" ]; then
     local contexts=$(k config get-contexts -o=name | sort -n)
@@ -140,6 +142,18 @@ k8sh_init() {
 
   complete -F _ns_completions ns
   complete -F _ct_completions ct
+
+  local bash_completion_present=
+  bash_completion_present=$(declare -F _init_completion)
+
+  if [[ "${bash_completion_present}" == "_init_completion" ]]; then
+    # without sourcing completion for `k` does not recognize __start_kubectl
+    source <(kubectl completion bash)
+    # make completion work for `k`
+    complete -F __start_kubectl k
+  else
+      echo -e "${RED}For kubectl.k completion please install bash-completion${RESTORE}"
+  fi
 
   reloadExtensions
 
