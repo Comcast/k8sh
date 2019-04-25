@@ -24,8 +24,6 @@ k8sh will automatically look at your current kubectl configuration to determine 
 
 ## Context and Namespace Commands
 
-_Tab Completion Supported_
-
 *k8sh* automatically keeps track of the current context and namespace you are operating in. These are displayed when starting up k8sh and on the k8sh prompt.
 
 To switch contexts:
@@ -47,8 +45,6 @@ To list available namespaces:
 ```
 ns
 ```
-
-*Tab completion* is supported
 
 NOTE: When changing the context, the change is made globally to kubectl as if you did a `kubectl config use-context` yourself. The namespace, however, is kept track of by k8sh. The standard `kubectl` command is aliased to always include the namespace that is currently selected within k8sh.
 
@@ -89,6 +85,15 @@ Instead of typing out `kubectl get pods/services/replicationcontrollers/etc` you
 * **ingresses** / **ing**
 * **configmaps**
 * **secrets**
+
+## Tab Completion
+
+The `ct`, `ns`, `k` (as well as `kubectl`) commands support tab completion. `k` completion requires *bash-completion* to be installed in order to function which in turn requires bash 4.1+.
+
+### Installing bash 4 / bash-completion on MacOSX
+
+Upgrading to Bash 4: https://itnext.io/upgrading-bash-on-macos-7138bd1066ba
+Installing Bash Completion: https://davidalger.com/posts/bash-completion-on-os-x-with-brew/
 
 ## .k8sh_extensions
 On startup *k8sh* looks for a `.k8sh_extensions` file in your home directory. If it is there, it loads it as an inline bash script so you can supply your own aliases and functions to execute within k8sh.
