@@ -143,16 +143,16 @@ k8sh_init() {
   complete -F _ns_completions ns
   complete -F _ct_completions ct
 
-  local bash_completion_present=
-  bash_completion_present=$(declare -F _init_completion)
+  local bash_completion_present=$(type -t _get_comp_words_by_ref)
 
-  if [[ "${bash_completion_present}" == "_init_completion" ]]; then
+  if [[ ! -z "$bash_completion_present" ]]; then
+    echo "Setting up k completion..."
     # without sourcing completion for `k` does not recognize __start_kubectl
     source <(kubectl completion bash)
     # make completion work for `k`
     complete -F __start_kubectl k
   else
-      echo -e "${RED}For kubectl.k completion please install bash-completion${RESTORE}"
+      echo -e "${RED}For k completion please install bash-completion${RESTORE}"
   fi
 
   reloadExtensions
