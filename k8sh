@@ -109,6 +109,7 @@ k8sh_init() {
   alias scale="k scale"
   alias rollout="k rollout"
   alias logs="k logs"
+  alias explain="k explain"
 
   # Query common resources
   # Resource reference list:
