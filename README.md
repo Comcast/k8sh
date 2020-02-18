@@ -94,6 +94,7 @@ The `ct`, `ns`, `k` (as well as `kubectl`) commands support tab completion. `k` 
 ### Installing bash 4 / bash-completion on MacOSX
 
 Upgrading to Bash 4: https://itnext.io/upgrading-bash-on-macos-7138bd1066ba
+
 Installing Bash Completion: https://davidalger.com/posts/bash-completion-on-os-x-with-brew/
 
 ## .k8sh_extensions
