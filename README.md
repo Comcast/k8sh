@@ -66,6 +66,7 @@ Shorthands for common actions
 * **scale** -> k scale
 * **rollout** -> k rollout
 * **logs** -> k logs
+* **explain** -> k explain
 
 ### Query for common resources (kubectl get)
 Instead of typing out `kubectl get pods/services/replicationcontrollers/etc` you can simply type the following aliases to get a list of those resources:
