@@ -108,4 +108,4 @@ reloadExtensions
 See `examples/k8sh_extensions` for some examples of what extensions can do.
 
 ## Todo
-* Get the standard `kubectl` tab completion to work with aliases.
+* Feel free to submit your ideas!
