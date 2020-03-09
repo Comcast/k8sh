@@ -15,7 +15,3 @@ busybox() {
   fi
   k run -i --tty busybox --image=busybox --restart=Never --overrides="$OVERRIDE_PARAM" -- sh
 }
-
-# istioctl
-alias istioctl="istioctl --context \$KUBECTL_CONTEXT --namespace \$KUBECTL_NAMESPACE"
-
