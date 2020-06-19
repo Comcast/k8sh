@@ -156,10 +156,10 @@ k8sh_init() {
       echo -e "${RED}For k completion please install bash-completion${RESTORE}"
   fi
 
-  reloadExtensions
-
   # Set up PS1 prompt
   export PS1="($PS_CONTEXT_COLOR\$KUBECTL_CONTEXT$PS_RESTORE/$PS_NAMESPACE_COLOR\$KUBECTL_NAMESPACE$PS_RESTORE) \W ${PS_LPURPLE}\$${PS_RESTORE} "
+
+  reloadExtensions
 
   echo ""
   echo -e "Context: $CONTEXT_COLOR$KUBECTL_CONTEXT$RESTORE"
